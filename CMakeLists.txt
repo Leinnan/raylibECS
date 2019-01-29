@@ -9,6 +9,6 @@ add_subdirectory(ext/raylib)
 add_subdirectory(ext/entt)
 
 include_directories(src ext src/controllers src/components src/systems)
-add_executable(${PROJECT_NAME} src/main.cpp src/systems/RenderSystem.cpp)
+add_executable(${PROJECT_NAME} src/main.cpp src/systems/RenderSystem.cpp src/systems/PlayerInputSystem.cpp)
 #set(raylib_VERBOSE 1)
 target_link_libraries(${PROJECT_NAME} raylib EnTT)

@@ -38,9 +38,4 @@ Vector3 RenderSystem::getCameraPos(const Vector3 &pos, const float &angle, const
              pos.y + cameraOffset.y,
              pos.z + std::sin(PI * angle / 180.f) * cameraOffset.z};
 }
-
-Vector3 RenderSystem::getHorizontalMovement(const float &length, const float &angle)
-{
-    return {std::cos(PI * angle / 180.f) * length, 0.f, std::sin(PI * angle / 180.f) * length};
-}
 } // namespace Systems
