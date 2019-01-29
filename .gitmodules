@@ -1,0 +1,6 @@
+[submodule "ext/raylib"]
+	path = ext/raylib
+	url = https://github.com/raysan5/raylib
+[submodule "ext/entt"]
+	path = ext/entt
+	url = https://github.com/skypjack/entt
