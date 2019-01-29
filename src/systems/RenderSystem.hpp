@@ -1,6 +1,6 @@
 #ifndef RENDER_SYSTEM_HPP
 #define RENDER_SYSTEM_HPP
-#include <entt/entt.hpp>
+#include <entt/entity/registry.hpp>
 #include "raylib.h"
 
 namespace Systems

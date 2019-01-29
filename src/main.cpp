@@ -34,6 +34,7 @@ void createEmptyPlayer(entt::registry<>& reg)
 int main()
 {
     entt::registry registry;
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_MSAA_4X_HINT);
     InitWindow(screenWidth, screenHeight, "Raylib tests");
     Systems::RenderSystem renderSystem(registry);
     Systems::PlayerInputSystem playerInputSystem;
