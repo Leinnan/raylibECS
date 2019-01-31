@@ -17,7 +17,7 @@ namespace Controllers
             fontCache.clear();
         }
     private:
-        entt::resource_cache<sf::Image> imageCache;
+        entt::resource_cache<Image> imageCache;
     };
 }
 

@@ -1,3 +1,4 @@
+#include "components/BillboardRenderer.hpp"
 #include "components/CameraTarget.hpp"
 #include "components/CylinderRenderer.hpp"
 #include "components/PlayerInput.hpp"
@@ -27,8 +28,9 @@ void createEmptyPlayer(entt::registry<>& reg)
     reg.assign<Components::CameraTarget>(entity,Vector3{-10.f,5.f,-10.f});
     reg.assign<Components::PlayerInput>(entity);
     reg.assign<Components::Velocity>(entity);
-    reg.assign<Components::Transform>(entity,Vector3{0.f,0.f,0.f},0.f);
-    reg.assign<Components::CylinderRenderer>(entity,Components::CylinderRenderer{ 0.3f,0.4f,1.f,10,RED });
+    reg.assign<Components::Transform>(entity,Vector3{0.f,1.f,0.f},0.f);
+    reg.assign<Components::BillboardRenderer>(entity,Components::BillboardRenderer("knight.png",3.f,WHITE));
+    //reg.assign<Components::CylinderRenderer>(entity,Components::CylinderRenderer{ 0.3f,0.4f,1.f,10,RED });
 }
 
 int main()
