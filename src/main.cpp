@@ -1,6 +1,7 @@
 #include "components/BillboardRenderer.hpp"
 #include "components/CameraTarget.hpp"
 #include "components/CylinderRenderer.hpp"
+#include "components/MeshRenderer.hpp"
 #include "components/PlayerInput.hpp"
 #include "components/Transform.hpp"
 #include "components/Velocity.hpp"
@@ -28,9 +29,17 @@ void createEmptyPlayer(entt::registry<>& reg)
     reg.assign<Components::CameraTarget>(entity,Vector3{-10.f,5.f,-10.f});
     reg.assign<Components::PlayerInput>(entity);
     reg.assign<Components::Velocity>(entity);
-    reg.assign<Components::Transform>(entity,Vector3{0.f,1.f,0.f},0.f);
-    reg.assign<Components::BillboardRenderer>(entity,Components::BillboardRenderer("knight.png",3.f,WHITE));
+    reg.assign<Components::Transform>(entity,Vector3{0.f,0.f,0.f},0.f);
+    reg.assign<Components::MeshRenderer>(entity,Components::MeshRenderer("knight.obj","knight.png", 2.0f));
+    //reg.assign<Components::BillboardRenderer>(entity,Components::BillboardRenderer("knight.png",3.f,WHITE));
     //reg.assign<Components::CylinderRenderer>(entity,Components::CylinderRenderer{ 0.3f,0.4f,1.f,10,RED });
+}
+
+void createPart(entt::registry<>& reg, Vector3 pos)
+{
+    auto entity = reg.create();
+    reg.assign<Components::Transform>(entity,pos,0.f);
+    reg.assign<Components::MeshRenderer>(entity,Components::MeshRenderer("part.obj","tilemap.png", 2.0f));
 }
 
 int main()
@@ -42,6 +51,9 @@ int main()
     Systems::PlayerInputSystem playerInputSystem;
 
     createEmptyPlayer(registry);
+    for(int i = 0; i < 10; i++)
+        createPart(registry,{-10.f + 8.0f * i,0.f,0.f});
+
     Camera camera = {0};
     camera.target = (Vector3){0.0f, 0.5f, 0.0f};
     camera.up = (Vector3){0.0f, 1.0f, 0.0f};
