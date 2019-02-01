@@ -26,20 +26,18 @@ Vector3 getHorizontalMovement(const float &length, const float &angle)
 void createEmptyPlayer(entt::registry<>& reg)
 {
     auto entity = reg.create();
-    reg.assign<Components::CameraTarget>(entity,Vector3{-10.f,5.f,-10.f});
+    reg.assign<Components::CameraTarget>(entity,Vector3{-10.f,6.f,-10.f});
     reg.assign<Components::PlayerInput>(entity);
     reg.assign<Components::Velocity>(entity);
     reg.assign<Components::Transform>(entity,Vector3{0.f,0.f,0.f},0.f);
-    reg.assign<Components::MeshRenderer>(entity,Components::MeshRenderer("knight.obj","knight.png", 2.0f));
-    //reg.assign<Components::BillboardRenderer>(entity,Components::BillboardRenderer("knight.png",3.f,WHITE));
-    //reg.assign<Components::CylinderRenderer>(entity,Components::CylinderRenderer{ 0.3f,0.4f,1.f,10,RED });
+    reg.assign<Components::MeshRenderer>(entity,Components::MeshRenderer("data/gfx/knight.obj","data/gfx/knight.png", 2.0f));
 }
 
 void createPart(entt::registry<>& reg, Vector3 pos)
 {
     auto entity = reg.create();
     reg.assign<Components::Transform>(entity,pos,0.f);
-    reg.assign<Components::MeshRenderer>(entity,Components::MeshRenderer("part.obj","tilemap.png", 2.0f));
+    reg.assign<Components::MeshRenderer>(entity,Components::MeshRenderer("data/gfx/part.obj","data/gfx/tilemap.png", 2.0f));
 }
 
 int main()
