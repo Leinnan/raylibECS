@@ -34,8 +34,6 @@ void RenderSystem::Update(entt::registry<> &registry, Camera &camera)
     registry.view<Components::CylinderRenderer, Components::Transform>().each([&](const auto, const auto &cylinder, const auto &transform) {
         DrawCylinder(transform.pos, cylinder.radiusTop, cylinder.radiusBottom, cylinder.height, cylinder.sides, cylinder.color);
     });
-    //DrawGrid(10, 1.0f);
-    //DrawGizmo({0.f, 0.f, 0.f});
     registry.view<Components::BillboardRenderer, Components::Transform>().each([&](const auto, const auto &billboard, const auto &transform) {
         DrawBillboard(camera, billboard.texture, transform.pos, billboard.size, billboard.color);
     });
@@ -44,7 +42,7 @@ void RenderSystem::Update(entt::registry<> &registry, Camera &camera)
         DrawModelEx(mesh.model, transform.pos, {0.f, -1.f, 0.f}, transform.angle, {mesh.scale, mesh.scale, mesh.scale}, WHITE);
     });
     EndMode3D();
-    DrawText("Leinnan", 10, 10, 14, CLITERAL{230, 102, 1, 255});
+    DrawText("Debug build", 10, 10, 12, CLITERAL{230, 102, 1, 255});
     EndDrawing();
 }
 

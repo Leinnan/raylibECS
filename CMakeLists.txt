@@ -11,6 +11,6 @@ add_subdirectory(ext/entt)
 file(COPY ${CMAKE_SOURCE_DIR}/data DESTINATION ${CMAKE_BINARY_DIR})
 
 include_directories(src ext src/controllers src/components src/systems)
-add_executable(${PROJECT_NAME} src/main.cpp src/systems/RenderSystem.cpp src/systems/PlayerInputSystem.cpp)
+add_executable(${PROJECT_NAME} src/main.cpp src/systems/CollisionSystem.cpp src/systems/RenderSystem.cpp src/systems/PlayerInputSystem.cpp)
 #set(raylib_VERBOSE 1)
 target_link_libraries(${PROJECT_NAME} raylib EnTT)
