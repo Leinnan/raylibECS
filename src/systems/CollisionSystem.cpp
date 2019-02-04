@@ -18,15 +18,21 @@ namespace Systems
         
         registry.view<Components::Transform, Components::Velocity, Components::Collisions>().each(
         [&](auto& ent, auto &transform, const auto &vel, const auto& collider) {
-            const auto& box = collider.box;
+            auto& boxes = collider.boxes;
             bool isColliding = false;
             
             for(auto& other : colliders)
             {
                 if(other == ent)
                     continue;
-                auto& otherBox = registry.get<Components::Collisions>(other);
-                isColliding = CheckCollisionBoxes(box,otherBox.box);               
+                auto& otherBoxes = registry.get<Components::Collisions>(other).boxes;
+                isColliding = std::any_of(otherBoxes.begin(),otherBoxes.end(),[&boxes](const BoundingBox& otherBox )
+                            {
+                                return std::any_of(boxes.begin(),boxes.end(),[&otherBox](const BoundingBox& box ){
+                                    return CheckCollisionBoxes(box,otherBox);
+                                });
+                            }
+                            );
                 if(isColliding)
                     break;
             }

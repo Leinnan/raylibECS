@@ -24,7 +24,8 @@ void PlayerInputSystem::Update(entt::registry<> &registry)
             transform.angle -= static_cast<int>(isLeft) * PLAYER_SPEED * 1.5f * GetFrameTime();
             transform.angle += static_cast<int>(isRight) * PLAYER_SPEED * 1.5f * GetFrameTime();
             vel.movement = getHorizontalMovement((isUp || isDown ? (isUp ? PLAYER_SPEED : -0.5f * PLAYER_SPEED) : 0.f) * GetFrameTime(), transform.angle);
-
+            
+            vel.oldPos = transform.pos;
             transform.pos.x += vel.movement.x;
             transform.pos.z += vel.movement.z;
         });

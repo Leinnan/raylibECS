@@ -1,6 +1,7 @@
 #ifndef COLLISIONS_HPP
 #define COLLISIONS_HPP
 #include "raylib.h"
+#include <vector>
 
 namespace Components
 {
@@ -16,7 +17,7 @@ namespace Components
 
     struct Collisions final
     {
-        BoundingBox box;
+        std::vector<BoundingBox> boxes;
         Vector3 offset;
         Vector3 size;
 
