@@ -1,5 +1,6 @@
 #include "RenderSystem.hpp"
 #include "components/CameraTarget.hpp"
+#include "components/Collisions.hpp"
 #include "components/CylinderRenderer.hpp"
 #include "components/MeshRenderer.hpp"
 #include "components/BillboardRenderer.hpp"
@@ -38,9 +39,14 @@ void RenderSystem::Update(entt::registry<> &registry, Camera &camera)
         DrawBillboard(camera, billboard.texture, transform.pos, billboard.size, billboard.color);
     });
     registry.view<Components::MeshRenderer, Components::Transform>().each([&](const auto, const auto &mesh, const auto &transform) {
-        std::cout << "transform.angle: " << transform.angle << '\n';
         DrawModelEx(mesh.model, transform.pos, {0.f, -1.f, 0.f}, transform.angle, {mesh.scale, mesh.scale, mesh.scale}, WHITE);
     });
+
+    registry.view<Components::Collisions, Components::Transform>().each([&](const auto, const auto &collisions, const auto &transform) {
+        for(const auto& box : collisions.boxes)
+            DrawBoundingBox(box, RED);
+    });
+    
     EndMode3D();
     DrawText("Debug build", 10, 10, 12, CLITERAL{230, 102, 1, 255});
     EndDrawing();

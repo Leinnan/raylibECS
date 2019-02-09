@@ -1,5 +1,4 @@
 #include "CollisionSystem.hpp"
-#include "components/Collisions.hpp"
 #include "components/Transform.hpp"
 #include "components/Velocity.hpp"
 
@@ -10,14 +9,23 @@
 namespace Systems
 {
     CollisionSystem::CollisionSystem(entt::registry<>& registry)
-    {}
+    {
+    registry.construction<Components::Collisions>()
+        .connect<&CollisionSystem::PrepareCollisions>(this);
+        }
 
     void CollisionSystem::Update(entt::registry<> &registry)
     {
         auto colliders = registry.view<Components::Transform, Components::Collisions>();
         
         registry.view<Components::Transform, Components::Velocity, Components::Collisions>().each(
-        [&](auto& ent, auto &transform, const auto &vel, const auto& collider) {
+        [&](auto& ent, auto &transform, const auto &vel, auto& collider) {
+            collider.boxes.clear();
+            for(const auto& col : collider.collisions)
+            {
+                collider.boxes.push_back(BoundingBoxFromCollision(transform.pos,col));
+            }
+
             auto& boxes = collider.boxes;
             bool isColliding = false;
             
@@ -40,5 +48,18 @@ namespace Systems
             if(isColliding)
                 transform.pos = vel.oldPos;
         });
+    }
+
+    void CollisionSystem::PrepareCollisions(entt::registry<> &registry, std::uint32_t entity)
+    {
+        if (registry.has<Components::Transform>(entity))
+        {
+            auto &transform = registry.get<Components::Transform>(entity);
+            auto &collider = registry.get<Components::Collisions>(entity);
+
+            collider.boxes.clear();
+            for(const auto& col : collider.collisions)
+                collider.boxes.push_back(BoundingBoxFromCollision(transform.pos,col));
+        }
     }
 }
