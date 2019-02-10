@@ -31,7 +31,7 @@ void createEmptyPlayer(entt::registry<> &reg)
     reg.assign<Components::CameraTarget>(entity, Vector3{-10.f, 8.f, -10.f});
     reg.assign<Components::PlayerInput>(entity);
     reg.assign<Components::Velocity>(entity);
-    reg.assign<Components::Transform>(entity, Vector3{0.f, 0.f, 0.f}, 0.f);
+    reg.assign<Components::Transform>(entity, Vector3{70.f, 0.f, 0.f}, 0.f);
     reg.assign<Components::MeshRenderer>(entity, Components::MeshRenderer("data/gfx/knight.obj", "data/gfx/knight.png", 2.0f));
     reg.assign<Components::Collisions>(entity, Components::Collisions({Components::Collision(Vector3{0.f, 1.f, 0.f}, Vector3{0.8f, 2.0f, 0.8f})}));
 }
@@ -43,6 +43,16 @@ void createPart(entt::registry<> &reg, Vector3 pos)
     reg.assign<Components::MeshRenderer>(entity, Components::MeshRenderer("data/gfx/part.obj", "data/gfx/tilemap.png", 2.0f));
     reg.assign<Components::Collisions>(entity, Components::Collisions({Components::Collision(Vector3{0.f, 3.f, -4.2f}, Vector3{8.0f, 6.0f, 1.0f}),
                                                                        Components::Collision(Vector3{0.f, 3.f, 4.2f}, Vector3{8.0f, 6.0f, 1.0f})}));
+}
+
+void createCornerPart(entt::registry<> &reg, Vector3 pos)
+{
+    auto entity = reg.create();
+    reg.assign<Components::Transform>(entity, pos, 0.f);
+    reg.assign<Components::MeshRenderer>(entity, Components::MeshRenderer("data/gfx/part_corner.obj", "data/gfx/tilemap.png", 2.0f));
+    reg.assign<Components::Collisions>(entity, Components::Collisions({Components::Collision(Vector3{4.2f, 3.f, 4.0f}, Vector3{1.0f, 6.0f, 16.0f}),
+                                                                       Components::Collision(Vector3{-8.0f, 3.f, -4.2f}, Vector3{24.0f, 6.0f, 1.0f}),
+                                                                       Components::Collision(Vector3{-8.0f, 3.f, 8.2f}, Vector3{8.0f, 6.0f, 9.0f})}));
 }
 
 int main()
@@ -57,6 +67,8 @@ int main()
     createEmptyPlayer(registry);
     for (int i = 0; i < 10; i++)
         createPart(registry, {-10.f + 8.0f * i, 0.f, 0.f});
+    
+    createCornerPart(registry, {78.0f,0.f,0.f});
 
     Camera camera = {0};
     camera.target = (Vector3){0.0f, 0.5f, 0.0f};
