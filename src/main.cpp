@@ -1,3 +1,4 @@
+#include "components/Actor.hpp"
 #include "components/BillboardRenderer.hpp"
 #include "components/CameraTarget.hpp"
 #include "components/Collisions.hpp"
@@ -7,6 +8,7 @@
 #include "components/Transform.hpp"
 #include "components/Velocity.hpp"
 #include "systems/CollisionSystem.hpp"
+#include "systems/MovementSystem.hpp"
 #include "systems/PlayerInputSystem.hpp"
 #include "systems/RenderSystem.hpp"
 #include "raylib.h"
@@ -63,6 +65,7 @@ int main()
     Systems::RenderSystem renderSystem(registry);
     Systems::PlayerInputSystem playerInputSystem;
     Systems::CollisionSystem collisionSystem(registry);
+    Systems::MovementSystem movementSystem;
 
     createEmptyPlayer(registry);
     for (int i = 0; i < 10; i++)
@@ -81,6 +84,7 @@ int main()
     while (!WindowShouldClose())
     {
         playerInputSystem.Update(registry);
+        movementSystem.Update(registry);
         collisionSystem.Update(registry);
         renderSystem.Update(registry, camera);
     }

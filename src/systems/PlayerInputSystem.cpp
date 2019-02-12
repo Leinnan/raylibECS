@@ -12,22 +12,14 @@ namespace Systems
 void PlayerInputSystem::Update(entt::registry<> &registry)
 {
     registry.view<Components::Velocity, Components::PlayerInput, Components::Transform>().each(
-        [&](const auto, auto &vel, const auto &playerInput, auto &transform) {
-            vel.movement.x = 0.f;
-            vel.movement.z = 0.f;
-
+        [&](const auto, auto &vel, const auto &playerInput, const auto &transform) {
             const bool isLeft = IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A);
             const bool isRight = IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D);
             const bool isUp = IsKeyDown(KEY_UP) || IsKeyDown(KEY_W);
             const bool isDown = IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S);
 
-            transform.angle -= static_cast<int>(isLeft) * PLAYER_SPEED * 1.5f * GetFrameTime();
-            transform.angle += static_cast<int>(isRight) * PLAYER_SPEED * 1.5f * GetFrameTime();
+            vel.angleChange = (isLeft ? -1 : (isRight ? 1 : 0)) * PLAYER_SPEED * 1.5f * GetFrameTime();
             vel.movement = getHorizontalMovement((isUp || isDown ? (isUp ? PLAYER_SPEED : -0.5f * PLAYER_SPEED) : 0.f) * GetFrameTime(), transform.angle);
-            
-            vel.oldPos = transform.pos;
-            transform.pos.x += vel.movement.x;
-            transform.pos.z += vel.movement.z;
         });
 }
 
