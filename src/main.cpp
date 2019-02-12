@@ -3,11 +3,13 @@
 #include "components/CameraTarget.hpp"
 #include "components/Collisions.hpp"
 #include "components/CylinderRenderer.hpp"
+#include "components/DestroyAfterTime.hpp"
 #include "components/MeshRenderer.hpp"
 #include "components/PlayerInput.hpp"
 #include "components/Transform.hpp"
 #include "components/Velocity.hpp"
 #include "systems/CollisionSystem.hpp"
+#include "systems/DestroySystem.hpp"
 #include "systems/MovementSystem.hpp"
 #include "systems/PlayerInputSystem.hpp"
 #include "systems/RenderSystem.hpp"
@@ -66,6 +68,7 @@ int main()
     Systems::PlayerInputSystem playerInputSystem;
     Systems::CollisionSystem collisionSystem(registry);
     Systems::MovementSystem movementSystem;
+    Systems::DestroySystem destroySystem;
 
     createEmptyPlayer(registry);
     for (int i = 0; i < 10; i++)
@@ -83,6 +86,7 @@ int main()
     SetTargetFPS(60);
     while (!WindowShouldClose())
     {
+        destroySystem.Update(registry);
         playerInputSystem.Update(registry);
         movementSystem.Update(registry);
         collisionSystem.Update(registry);
