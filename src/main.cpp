@@ -7,7 +7,9 @@
 #include "components/MeshRenderer.hpp"
 #include "components/PlayerInput.hpp"
 #include "components/Transform.hpp"
+#include "components/Patrol.hpp"
 #include "components/Velocity.hpp"
+#include "systems/AiSystem.hpp"
 #include "systems/CollisionSystem.hpp"
 #include "systems/DestroySystem.hpp"
 #include "systems/MovementSystem.hpp"
@@ -40,6 +42,19 @@ void createEmptyPlayer(entt::registry<> &reg)
     reg.assign<Components::Collisions>(entity, Components::Collisions({Components::Collision(Vector3{0.f, 1.f, 0.f}, Vector3{0.8f, 2.0f, 0.8f})}));
 }
 
+void createPatrolBox(entt::registry<> &reg)
+{
+    auto entity = reg.create();
+    reg.assign<Components::Transform>(entity, Vector3{70.f, 0.f, -4.f}, 0.f);
+    reg.assign<Components::Velocity>(entity);
+    reg.assign<Components::Actor>(entity);
+    reg.assign<Components::MeshRenderer>(entity, Components::MeshRenderer("data/gfx/knight.obj", "data/gfx/knight.png", 2.0f));
+    
+    std::vector<Vector3> points = {Vector3{70.f, 0.f, -4.f},Vector3{75.f, 0.f, 4.f}};
+    reg.assign<Components::Patrol>(entity,points,3.f);
+
+}
+
 void createPart(entt::registry<> &reg, Vector3 pos)
 {
     auto entity = reg.create();
@@ -69,8 +84,10 @@ int main()
     Systems::CollisionSystem collisionSystem(registry);
     Systems::MovementSystem movementSystem;
     Systems::DestroySystem destroySystem;
+    Systems::AiSystem aiSystem(registry);
 
     createEmptyPlayer(registry);
+    createPatrolBox(registry);
     for (int i = 0; i < 10; i++)
         createPart(registry, {-10.f + 8.0f * i, 0.f, 0.f});
     
@@ -88,6 +105,7 @@ int main()
     {
         destroySystem.Update(registry);
         playerInputSystem.Update(registry);
+        aiSystem.Update(registry,GetFrameTime());
         movementSystem.Update(registry);
         collisionSystem.Update(registry);
         renderSystem.Update(registry, camera);

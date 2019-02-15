@@ -13,7 +13,7 @@ namespace Components
     struct Actor final
     {
         Activity curAction = Activity::Idle;
-        float speed = 50.f;
+        float speed = 20.f;
     };
 }
 
