@@ -39,8 +39,6 @@ void AiSystem::Update(entt::registry<> &registry, const float &delta) {
                     patrol.curPart = Components::PatrolPart::Waiting;
                     actor.curAction = Components::Activity::Idle;
                 }
-                const auto &horizontalMovement =
-                    ar::getAbs(destPoint.x - transform.pos.x) > ar::getAbs(destPoint.z - transform.pos.z);
                 const auto &angle = Vector2Angle({transform.pos.x, transform.pos.z}, {destPoint.x, destPoint.z});
                 const auto &length = actor.speed * GetFrameTime();
 

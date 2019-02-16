@@ -5,6 +5,7 @@
 #include "components/CylinderRenderer.hpp"
 #include "components/DestroyAfterTime.hpp"
 #include "components/MeshRenderer.hpp"
+#include "components/Missile.hpp"
 #include "components/Patrol.hpp"
 #include "components/PlayerInput.hpp"
 #include "components/Transform.hpp"
@@ -13,6 +14,7 @@
 #include "systems/AiSystem.hpp"
 #include "systems/CollisionSystem.hpp"
 #include "systems/DestroySystem.hpp"
+#include "systems/MissileSystem.hpp"
 #include "systems/MovementSystem.hpp"
 #include "systems/PlayerInputSystem.hpp"
 #include "systems/RenderSystem.hpp"
@@ -75,6 +77,18 @@ void createCornerPart(entt::registry<> &reg, Vector3 pos) {
                                         Components::Collision(Vector3{-8.0f, 3.f, 8.2f}, Vector3{8.0f, 6.0f, 9.0f})}));
 }
 
+void createMissile(entt::registry<> &reg, float angle, Vector3 pos)
+{
+    auto entity = reg.create();
+    reg.assign<Components::Transform>(entity,pos,angle);
+    reg.assign<Components::Velocity>(entity);
+    reg.assign<Components::Missile>(entity,angle,1.0f);
+    reg.assign<Components::MeshRenderer>(entity,
+                                         Components::MeshRenderer("data/gfx/star.obj", "data/gfx/knight.png", 2.0f));
+    reg.assign<Components::DestroyAfterTime>(entity,15.0f);
+
+}
+
 int main() {
     entt::registry registry;
     SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_MSAA_4X_HINT);
@@ -85,6 +99,7 @@ int main() {
     Systems::MovementSystem movementSystem;
     Systems::DestroySystem destroySystem;
     Systems::AiSystem aiSystem(registry);
+    Systems::MissileSystem missileSystem;
 
     createEmptyPlayer(registry);
     createPatrolBox(registry);
@@ -92,6 +107,11 @@ int main() {
         createPart(registry, {-10.f + 8.0f * i, 0.f, 0.f});
 
     createCornerPart(registry, {78.0f, 0.f, 0.f});
+    createMissile(registry,20,{72.0f, 0.f, 0.f});
+    createMissile(registry,120,{72.0f, 0.f, 0.f});
+    createMissile(registry,220,{72.0f, 0.f, 0.f});
+    createMissile(registry,90,{72.0f, 0.f, 0.f});
+    createMissile(registry,160,{72.0f, 0.f, 0.f});
 
     Camera camera = {0};
     camera.target = (Vector3){0.0f, 0.5f, 0.0f};
@@ -104,6 +124,7 @@ int main() {
     while (!WindowShouldClose()) {
         destroySystem.Update(registry);
         playerInputSystem.Update(registry);
+        missileSystem.Update(registry);
         aiSystem.Update(registry, GetFrameTime());
         movementSystem.Update(registry);
         collisionSystem.Update(registry);
