@@ -3,16 +3,10 @@
 #include "raylib.h"
 #include <vector>
 
-namespace Components
-{
-enum class PatrolPart
-{
-    Waiting,
-    Walking
-};
+namespace Components {
+enum class PatrolPart { Waiting, Walking };
 
-struct Patrol final
-{
+struct Patrol final {
     std::vector<Vector3> points;
     float waitTime = 1.0f;
     float waitedTime = 0.0f;
@@ -20,5 +14,6 @@ struct Patrol final
     int curTarget = 0;
 };
 } // namespace Components
+  // Components
 
 #endif

@@ -1,10 +1,9 @@
 #include "utils/Arkona.hpp"
 
-#include <math.h>
 #include <cmath>
+#include <math.h>
 
-float ar::getDistance(Vector2 first,Vector2 second)
-{
+float ar::getDistance(Vector2 first, Vector2 second) {
     float one_part = 0;
     float second_part = 0;
     float result = 0;
@@ -19,20 +18,17 @@ float ar::getDistance(Vector2 first,Vector2 second)
     return result;
 }
 
-
-float ar::cubicEaseInOut(float t)
-{
-    if(t <= 0.5f)
-        return 2.0f * pow(t,2.0f);
+float ar::cubicEaseInOut(float t) {
+    if (t <= 0.5f)
+        return 2.0f * pow(t, 2.0f);
     t -= 0.5f;
     return 2.0f * t * (1.0f - t) + 0.5;
 }
 
-float ar::easeInOutBounce( float t )
-{
-    if( t < 0.5 ) {
-        return 8 * pow( 2, 8 * (t - 1) ) * abs( sin( t * PI * 7 ) );
+float ar::easeInOutBounce(float t) {
+    if (t < 0.5) {
+        return 8 * pow(2, 8 * (t - 1)) * abs(sin(t * PI * 7));
     } else {
-        return 1 - 8 * pow( 2, -8 * t ) * abs( sin( t * PI * 7 ) );
+        return 1 - 8 * pow(2, -8 * t) * abs(sin(t * PI * 7));
     }
 }

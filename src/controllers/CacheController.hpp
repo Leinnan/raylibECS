@@ -4,21 +4,19 @@
 #include "raylib.h"
 #include <entt/entt.hpp>
 
+namespace Controllers {
+class CacheController : public Controller<CacheController> {
+  public:
+    entt::resource_cache<Image> &getImageCache() { return imageCache; }
+    ~CacheController() {
+        imageCache.clear();
+        fontCache.clear();
+    }
 
-namespace Controllers
-{
-    class CacheController : public Controller<CacheController>
-    {
-    public:
-        entt::resource_cache<Image>& getImageCache(){ return imageCache; }
-        ~CacheController()
-        {
-            imageCache.clear();
-            fontCache.clear();
-        }
-    private:
-        entt::resource_cache<Image> imageCache;
-    };
-}
+  private:
+    entt::resource_cache<Image> imageCache;
+};
+} // namespace Controllers
+  // Controllers
 
 #endif

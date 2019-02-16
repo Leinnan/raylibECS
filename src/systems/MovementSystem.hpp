@@ -2,15 +2,14 @@
 #define MOVEMENT_SYSTEM_HPP
 #include <entt/entt.hpp>
 
-namespace Systems
-{
-    class MovementSystem
-    {
-        public:
-            MovementSystem(){};
-            void Update(entt::registry<> &registry);
-            void Shutdown(){};
-    };
-}
+namespace Systems {
+class MovementSystem {
+  public:
+    MovementSystem(){};
+    void Update(entt::registry<> &registry);
+    void Shutdown(){};
+};
+} // namespace Systems
+  // Systems
 
 #endif

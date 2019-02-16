@@ -1,10 +1,8 @@
 #ifndef CYLINDER_RENDERER_HPP
 #define CYLINDER_RENDERER_HPP
 #include "raylib.h"
-namespace Components
-{
-struct CylinderRenderer final
-{
+namespace Components {
+struct CylinderRenderer final {
     float radiusTop;
     float radiusBottom;
     float height;
@@ -13,5 +11,6 @@ struct CylinderRenderer final
 };
 
 } // namespace Components
+  // Components
 
 #endif
