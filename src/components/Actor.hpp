@@ -6,8 +6,8 @@ namespace Components {
 enum class Activity { Idle, Walking };
 
 struct Actor final {
+    float speed = 15.f;
     Activity curAction = Activity::Idle;
-    float speed = 20.f;
 };
 } // namespace Components
   // Components

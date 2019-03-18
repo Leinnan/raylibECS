@@ -1,6 +1,7 @@
 #include "systems/AiSystem.hpp"
 #include "components/Actor.hpp"
 #include "components/Patrol.hpp"
+#include "components/RotatingObject.hpp"
 #include "components/Transform.hpp"
 #include "components/Velocity.hpp"
 #include "raylib.h"
@@ -15,6 +16,12 @@ AiSystem::AiSystem(entt::registry<> &registry) {
 }
 
 void AiSystem::Update(entt::registry<> &registry, const float &delta) {
+    registry.view<Components::Velocity, Components::RotatingObject>().each(
+            [&](const auto, auto &vel, const auto &rotObject) {
+                vel.angleChange = rotObject.rotationSpeed * delta;
+            }
+            );
+
     registry.view<Components::Transform, Components::Velocity, Components::Patrol, Components::Actor>().each(
         [&](const auto, auto &transform, auto &vel, auto &patrol, auto &actor) {
             vel.movement.x = 0.f;
