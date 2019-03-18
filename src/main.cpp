@@ -53,7 +53,8 @@ void createPatrolBox(entt::registry<> &reg) {
     reg.assign<Components::MeshRenderer>(entity,
                                          Components::MeshRenderer("data/gfx/knight.obj", "data/gfx/knight.png", 2.0f));
 
-    std::vector<Vector3> points = {Vector3{30.f, 0.f, 0f}, Vector3{40.f, 0.f, -2.f}, Vector3{50.f, 0.f, 1.0f}, Vector3{75.f, 0.f, 0.f}, Vector3{77.f, 0.f, 4.f}, Vector3{75.f, 0.f, 0.f}};
+    std::vector<Vector3> points = {Vector3{30.f, 0.f, 0f},  Vector3{40.f, 0.f, -2.f}, Vector3{50.f, 0.f, 1.0f},
+                                   Vector3{75.f, 0.f, 0.f}, Vector3{77.f, 0.f, 4.f},  Vector3{75.f, 0.f, 0.f}};
     reg.assign<Components::Patrol>(entity, points, 3.f);
 }
 
@@ -78,23 +79,21 @@ void createCornerPart(entt::registry<> &reg, Vector3 pos) {
                                         Components::Collision(Vector3{-8.0f, 3.f, 8.2f}, Vector3{8.0f, 6.0f, 9.0f})}));
 }
 
-void createMissile(entt::registry<> &reg, float angle, Vector3 pos)
-{
+void createMissile(entt::registry<> &reg, float angle, Vector3 pos) {
     auto entity = reg.create();
-    reg.assign<Components::Transform>(entity,pos,angle);
+    reg.assign<Components::Transform>(entity, pos, angle);
     reg.assign<Components::Velocity>(entity);
-    reg.assign<Components::Missile>(entity,angle,1.0f);
+    reg.assign<Components::Missile>(entity, angle, 1.0f);
     reg.assign<Components::MeshRenderer>(entity,
                                          Components::MeshRenderer("data/gfx/star.obj", "data/gfx/knight.png", 2.0f));
-    reg.assign<Components::DestroyAfterTime>(entity,15.0f);
+    reg.assign<Components::DestroyAfterTime>(entity, 15.0f);
 }
 
-void createRotatingStar(entt::registry<> &reg, float angle, Vector3 pos)
-{
+void createRotatingStar(entt::registry<> &reg, float angle, Vector3 pos) {
     auto entity = reg.create();
-    reg.assign<Components::Transform>(entity,pos,angle);
+    reg.assign<Components::Transform>(entity, pos, angle);
     reg.assign<Components::Velocity>(entity);
-    reg.assign<Components::RotatingObject>(entity,40.0f);
+    reg.assign<Components::RotatingObject>(entity, 40.0f);
     reg.assign<Components::MeshRenderer>(entity,
                                          Components::MeshRenderer("data/gfx/star.obj", "data/gfx/knight.png", 2.0f));
 }
@@ -117,12 +116,12 @@ int main() {
         createPart(registry, {-10.f + 8.0f * i, 0.f, 0.f});
 
     createCornerPart(registry, {78.0f, 0.f, 0.f});
-    createMissile(registry,20,{72.0f, 0.f, 0.f});
-    createMissile(registry,120,{72.0f, 0.f, 0.f});
-    createMissile(registry,220,{72.0f, 0.f, 0.f});
-    createMissile(registry,90,{72.0f, 0.f, 0.f});
-    createMissile(registry,160,{72.0f, 0.f, 0.f});
-    createRotatingStar(registry,5,{72.0f,0.f,0.f});
+    createMissile(registry, 20, {72.0f, 0.f, 0.f});
+    createMissile(registry, 120, {72.0f, 0.f, 0.f});
+    createMissile(registry, 220, {72.0f, 0.f, 0.f});
+    createMissile(registry, 90, {72.0f, 0.f, 0.f});
+    createMissile(registry, 160, {72.0f, 0.f, 0.f});
+    createRotatingStar(registry, 5, {72.0f, 0.f, 0.f});
 
     Camera camera = {0};
     camera.target = (Vector3){0.0f, 0.5f, 0.0f};

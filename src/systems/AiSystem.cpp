@@ -17,10 +17,7 @@ AiSystem::AiSystem(entt::registry<> &registry) {
 
 void AiSystem::Update(entt::registry<> &registry, const float &delta) {
     registry.view<Components::Velocity, Components::RotatingObject>().each(
-            [&](const auto, auto &vel, const auto &rotObject) {
-                vel.angleChange = rotObject.rotationSpeed * delta;
-            }
-            );
+        [&](const auto, auto &vel, const auto &rotObject) { vel.angleChange = rotObject.rotationSpeed * delta; });
 
     registry.view<Components::Transform, Components::Velocity, Components::Patrol, Components::Actor>().each(
         [&](const auto, auto &transform, auto &vel, auto &patrol, auto &actor) {

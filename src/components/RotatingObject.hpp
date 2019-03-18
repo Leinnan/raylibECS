@@ -3,10 +3,10 @@
 
 namespace Components {
 
-    struct RotatingObject final {
-        float rotationSpeed = 0.0f;
-    };
+struct RotatingObject final {
+    float rotationSpeed = 0.0f;
+};
 } // namespace Components
 // Components
 
-#endif //ROTATING_OBJECT_HPP
+#endif // ROTATING_OBJECT_HPP
