@@ -1,12 +1,13 @@
 #ifndef MESH_RENDERER_HPP
 #define MESH_RENDERER_HPP
 #include "raylib.h"
+#include <string>
 
 namespace Components {
 struct MeshRenderer final {
-    const char *modelPath;
+    std::string modelPath;
     Model model;
-    const char *diffusePath;
+    std::string diffusePath;
     Texture2D diffuse;
     float scale;
     MeshRenderer(const char *modelPath, const char *diffusePath, const float &scale)

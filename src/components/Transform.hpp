@@ -9,5 +9,4 @@ struct Transform final {
 };
 } // namespace Components
   // Components
-
 #endif

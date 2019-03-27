@@ -68,8 +68,8 @@ void RenderSystem::LoadEntityTexture(entt::registry<> &registry, std::uint32_t e
     if (registry.has<Components::MeshRenderer>(entity)) {
         auto &mesh = registry.get<Components::MeshRenderer>(entity);
 
-        mesh.model = LoadModel(mesh.modelPath);
-        mesh.diffuse = LoadTexture(mesh.diffusePath);
+        mesh.model = LoadModel(mesh.modelPath.c_str());
+        mesh.diffuse = LoadTexture(mesh.diffusePath.c_str());
         mesh.model.material.maps[MAP_DIFFUSE].texture = mesh.diffuse;
     }
 }
