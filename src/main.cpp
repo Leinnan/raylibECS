@@ -19,6 +19,7 @@
 #include "systems/MovementSystem.hpp"
 #include "systems/PlayerInputSystem.hpp"
 #include "systems/RenderSystem.hpp"
+#include "utils/JsonParser.hpp"
 #include <cmath>
 #include <entt/entt.hpp>
 #include <json.hpp>
@@ -27,32 +28,12 @@
 #include <sstream>
 #include <string>
 
+using nlohmann::json;
+
 const int screenWidth = 800;
 const int screenHeight = 450;
 const float cubeSpeed = 35.f;
 const float rotationSpeed = 68.f;
-
-
-using nlohmann::json;
-
-void to_json(json& j, const Components::MeshRenderer& m) {
-    j = json{{"type", "MeshRenderer"}, {"modelPath", m.modelPath}, {"diffusePath", m.diffusePath}, {"scale", m.scale}};
-}
-void from_json(const json& j, Components::MeshRenderer& m) {
-    j.at("modelPath").get_to(m.modelPath);
-    j.at("diffusePath").get_to(m.diffusePath);
-    j.at("scale").get_to(m.scale);
-}
-void to_json(json& j, const Components::Transform& t) {
-    j = json{{"type", "Transform"}, {"posX", t.pos.x}, {"posY", t.pos.y}, {"posZ", t.pos.z}, {"angle", t.angle}};
-}
-void from_json(const json& j, Components::Transform& t) {
-    t.pos = {j.at("posX").get<float>(),
-             j.at("posY").get<float>(),
-             j.at("posZ").get<float>()};
-    j.at("angle").get_to(t.angle);
-}
-
 
 Vector3 getHorizontalMovement(const float &length, const float &angle) {
     return {std::cos(PI * angle / 180.f) * length, 0.f, std::sin(PI * angle / 180.f) * length};
@@ -152,19 +133,64 @@ int main() {
     createMissile(registry, 160, {72.0f, 0.f, 0.f});
     createRotatingStar(registry, 5, {72.0f, 0.f, 0.f});
 
-    registry.view<Components::MeshRenderer, Components::Transform>().each(
-            [&](const auto, const auto &mesh, const auto &transform) {
-                json Object;
-                json jMesh;
-                json jTransform;
-
-                to_json(jMesh,mesh);
-                to_json(jTransform,transform);
-
-                Object.push_back(jMesh);
-                Object.push_back(jTransform);
-                jsonReader.push_back(Object);
-            });
+    registry.each([&](auto entity) {
+        json entityObject;
+        if(registry.has<Components::MeshRenderer>(entity))
+        {
+            json component;
+            Components::to_json(component,registry.get<Components::MeshRenderer>(entity));
+            entityObject.push_back(component);
+        }
+        if(registry.has<Components::Transform>(entity))
+        {
+            json component;
+            Components::to_json(component,registry.get<Components::Transform>(entity));
+            entityObject.push_back(component);
+        }
+        if(registry.has<Components::PlayerInput>(entity))
+        {
+            json component;
+            Components::to_json(component,registry.get<Components::PlayerInput>(entity));
+            entityObject.push_back(component);
+        }
+        if(registry.has<Components::Velocity>(entity))
+        {
+            json component;
+            Components::to_json(component,registry.get<Components::Velocity>(entity));
+            entityObject.push_back(component);
+        }
+        if(registry.has<Components::Actor>(entity))
+        {
+            json component;
+            Components::to_json(component,registry.get<Components::Actor>(entity));
+            entityObject.push_back(component);
+        }
+        if(registry.has<Components::RotatingObject>(entity))
+        {
+            json component;
+            Components::to_json(component,registry.get<Components::RotatingObject>(entity));
+            entityObject.push_back(component);
+        }
+        if(registry.has<Components::Missile>(entity))
+        {
+            json component;
+            Components::to_json(component,registry.get<Components::Missile>(entity));
+            entityObject.push_back(component);
+        }
+        if(registry.has<Components::DestroyAfterTime>(entity))
+        {
+            json component;
+            Components::to_json(component,registry.get<Components::DestroyAfterTime>(entity));
+            entityObject.push_back(component);
+        }
+        if(registry.has<Components::Patrol>(entity))
+        {
+            json component;
+            Components::to_json(component,registry.get<Components::Patrol>(entity));
+            entityObject.push_back(component);
+        }
+        jsonReader.push_back(entityObject);
+    });
 
     std::ofstream o;
     o.open("data/world.json",std::ios::trunc);
