@@ -30,14 +30,9 @@
 
 using nlohmann::json;
 
-const int screenWidth = 800;
-const int screenHeight = 450;
-const float cubeSpeed = 35.f;
+const int screenWidth = 1024;
+const int screenHeight = 600;
 const float rotationSpeed = 68.f;
-
-Vector3 getHorizontalMovement(const float &length, const float &angle) {
-    return {std::cos(PI * angle / 180.f) * length, 0.f, std::sin(PI * angle / 180.f) * length};
-}
 
 void createEmptyPlayer(entt::registry<> &reg) {
     auto entity = reg.create();
@@ -64,7 +59,7 @@ void createPatrolBox(entt::registry<> &reg) {
     reg.assign<Components::Patrol>(entity, points, 3.f);
 }
 
-void createPart(entt::registry<> &reg, Vector3 pos, nlohmann::json &object) {
+void createPart(entt::registry<> &reg, Vector3 pos) {
     auto entity = reg.create();
     reg.assign<Components::Transform>(entity, pos, 0.f);
     reg.assign<Components::MeshRenderer>(entity,
@@ -74,7 +69,7 @@ void createPart(entt::registry<> &reg, Vector3 pos, nlohmann::json &object) {
                                         Components::Collision(Vector3{0.f, 3.f, 4.2f}, Vector3{8.0f, 6.0f, 1.0f})}));
 }
 
-void createCornerPart(entt::registry<> &reg, Vector3 pos, nlohmann::json &object) {
+void createCornerPart(entt::registry<> &reg, Vector3 pos) {
     auto entity = reg.create();
     reg.assign<Components::Transform>(entity, pos, 0.f);
     reg.assign<Components::MeshRenderer>(
@@ -119,13 +114,10 @@ int main() {
     createEmptyPlayer(registry);
     createPatrolBox(registry);
 
-
-    nlohmann::json jsonReader;
-
     for (int i = 0; i < 10; i++)
-        createPart(registry, {-10.f + 8.0f * i, 0.f, 0.f}, jsonReader);
+        createPart(registry, {-10.f + 8.0f * i, 0.f, 0.f});
 
-    createCornerPart(registry, {78.0f, 0.f, 0.f}, jsonReader);
+    createCornerPart(registry, {78.0f, 0.f, 0.f});
     createMissile(registry, 20, {72.0f, 0.f, 0.f});
     createMissile(registry, 120, {72.0f, 0.f, 0.f});
     createMissile(registry, 220, {72.0f, 0.f, 0.f});
@@ -133,76 +125,7 @@ int main() {
     createMissile(registry, 160, {72.0f, 0.f, 0.f});
     createRotatingStar(registry, 5, {72.0f, 0.f, 0.f});
 
-    registry.each([&](auto entity) {
-        json entityObject;
-        if(registry.has<Components::MeshRenderer>(entity))
-        {
-            json component;
-            Components::to_json(component,registry.get<Components::MeshRenderer>(entity));
-            entityObject.push_back(component);
-        }
-        if(registry.has<Components::Transform>(entity))
-        {
-            json component;
-            Components::to_json(component,registry.get<Components::Transform>(entity));
-            entityObject.push_back(component);
-        }
-        if(registry.has<Components::PlayerInput>(entity))
-        {
-            json component;
-            Components::to_json(component,registry.get<Components::PlayerInput>(entity));
-            entityObject.push_back(component);
-        }
-        if(registry.has<Components::Velocity>(entity))
-        {
-            json component;
-            Components::to_json(component,registry.get<Components::Velocity>(entity));
-            entityObject.push_back(component);
-        }
-        if(registry.has<Components::Actor>(entity))
-        {
-            json component;
-            Components::to_json(component,registry.get<Components::Actor>(entity));
-            entityObject.push_back(component);
-        }
-        if(registry.has<Components::RotatingObject>(entity))
-        {
-            json component;
-            Components::to_json(component,registry.get<Components::RotatingObject>(entity));
-            entityObject.push_back(component);
-        }
-        if(registry.has<Components::Missile>(entity))
-        {
-            json component;
-            Components::to_json(component,registry.get<Components::Missile>(entity));
-            entityObject.push_back(component);
-        }
-        if(registry.has<Components::DestroyAfterTime>(entity))
-        {
-            json component;
-            Components::to_json(component,registry.get<Components::DestroyAfterTime>(entity));
-            entityObject.push_back(component);
-        }
-        if(registry.has<Components::Patrol>(entity))
-        {
-            json component;
-            Components::to_json(component,registry.get<Components::Patrol>(entity));
-            entityObject.push_back(component);
-        }
-        jsonReader.push_back(entityObject);
-    });
-
-    std::ofstream o;
-    o.open("data/world.json",std::ios::trunc);
-    if(o.is_open())
-    {
-        o << jsonReader << std::endl;
-        o.close();
-    }
-    else
-    {
-        std::cout << "CANNOT OPEN FILE\n";
-    }
+    Components::parseToFile(registry,"data/world.json");
 
     Camera camera = {0};
     camera.target = (Vector3){0.0f, 0.5f, 0.0f};

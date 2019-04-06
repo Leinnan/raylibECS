@@ -51,6 +51,11 @@ namespace Components {
 
     void to_json(json& j, const Components::Patrol& t);
     void from_json(const json& j, Components::Patrol& t);
+
+    void to_json(json& j, const Components::Collisions& t);
+    void from_json(const json& j, Components::Collisions& t);
+
+    void parseToFile(entt::registry<>& registry, const char* filename);
 };
 
 

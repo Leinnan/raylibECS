@@ -4,6 +4,11 @@
 
 #include "JsonParser.hpp"
 
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <string>
+
 void Components::to_json(json &j, const Components::MeshRenderer &m) {
     j = json{{"type", "MeshRenderer"}, {"modelPath", m.modelPath}, {"diffusePath", m.diffusePath}, {"scale", m.scale}};
 }
@@ -97,4 +102,108 @@ void Components::from_json(const json &j, Components::Patrol &t) {
                             point.at("y").get<float>(),
                             point.at("z").get<float>()});
 
+}
+
+void Components::to_json(json &j, const Components::Collisions &t) {
+    json collisions = json::array();
+    for(const auto& collision : t.collisions)
+    {
+        collisions.push_back({{"sizeX", collision.size.x}, {"sizeY", collision.size.y}, {"sizeZ", collision.size.z},
+                              {"offsetX", collision.offset.x}, {"offsetY", collision.offset.y}, {"offsetZ", collision.offset.z}});
+    }
+    j = json{{"type", "Collisions"},{"collisions",collisions}};
+
+}
+
+void Components::from_json(const json &j, Components::Collisions &t) {
+    json collisions = j.at("collisions");
+
+    if(!collisions.is_array())
+        return;
+
+    for(json& point : collisions)
+        t.collisions.push_back(Components::Collision(
+                Vector3{point.at("offsetX").get<float>(), point.at("offsetY").get<float>(), point.at("offsetZ").get<float>()},
+                Vector3{point.at("sizeX").get<float>(), point.at("sizeY").get<float>(), point.at("sizeZ").get<float>()}));
+}
+
+void Components::parseToFile(entt::registry<> &registry, const char *filename) {
+    nlohmann::json jsonReader;
+
+    registry.each([&](auto entity) {
+        json entityObject;
+        if(registry.has<Components::MeshRenderer>(entity))
+        {
+            json component;
+            Components::to_json(component,registry.get<Components::MeshRenderer>(entity));
+            entityObject.push_back(component);
+        }
+        if(registry.has<Components::Transform>(entity))
+        {
+            json component;
+            Components::to_json(component,registry.get<Components::Transform>(entity));
+            entityObject.push_back(component);
+        }
+        if(registry.has<Components::PlayerInput>(entity))
+        {
+            json component;
+            Components::to_json(component,registry.get<Components::PlayerInput>(entity));
+            entityObject.push_back(component);
+        }
+        if(registry.has<Components::Velocity>(entity))
+        {
+            json component;
+            Components::to_json(component,registry.get<Components::Velocity>(entity));
+            entityObject.push_back(component);
+        }
+        if(registry.has<Components::Actor>(entity))
+        {
+            json component;
+            Components::to_json(component,registry.get<Components::Actor>(entity));
+            entityObject.push_back(component);
+        }
+        if(registry.has<Components::RotatingObject>(entity))
+        {
+            json component;
+            Components::to_json(component,registry.get<Components::RotatingObject>(entity));
+            entityObject.push_back(component);
+        }
+        if(registry.has<Components::Missile>(entity))
+        {
+            json component;
+            Components::to_json(component,registry.get<Components::Missile>(entity));
+            entityObject.push_back(component);
+        }
+        if(registry.has<Components::DestroyAfterTime>(entity))
+        {
+            json component;
+            Components::to_json(component,registry.get<Components::DestroyAfterTime>(entity));
+            entityObject.push_back(component);
+        }
+        if(registry.has<Components::Patrol>(entity))
+        {
+            json component;
+            Components::to_json(component,registry.get<Components::Patrol>(entity));
+            entityObject.push_back(component);
+        }
+        if(registry.has<Components::Collisions>(entity))
+        {
+            json component;
+            Components::to_json(component,registry.get<Components::Collisions>(entity));
+            entityObject.push_back(component);
+        }
+        jsonReader.push_back(entityObject);
+    });
+
+    std::ofstream o;
+    o.open(filename, std::ios::trunc);
+    if(o.is_open())
+    {
+        o << jsonReader << std::endl;
+        o.close();
+    }
+    else
+    {
+        std::cout << "CANNOT OPEN FILE\n";
+    }
 }
