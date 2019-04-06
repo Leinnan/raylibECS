@@ -16,6 +16,7 @@ struct Collisions final {
     std::vector<BoundingBox> boxes;
     std::vector<Collision> collisions;
     Collisions(std::vector<Collision> collisions) : collisions(collisions) {}
+    Collisions(){}
 };
 } // namespace Components
   // Components

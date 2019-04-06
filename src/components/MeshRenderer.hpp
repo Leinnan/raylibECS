@@ -10,8 +10,10 @@ struct MeshRenderer final {
     std::string diffusePath;
     Texture2D diffuse;
     float scale;
+
     MeshRenderer(const char *modelPath, const char *diffusePath, const float &scale)
         : modelPath(modelPath), diffusePath(diffusePath), scale(scale){};
+    MeshRenderer(){};
 };
 } // namespace Components
   // Components

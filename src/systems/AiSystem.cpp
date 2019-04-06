@@ -57,8 +57,10 @@ void AiSystem::Update(entt::registry<> &registry, const float &delta) {
 
 void AiSystem::PreparePatrolEntity(entt::registry<> &registry, std::uint32_t entity) {
     auto &transform = registry.get<Components::Transform>(entity);
-    const auto &patrol = registry.get<Components::Patrol>(entity);
+    const Components::Patrol &patrol = registry.get<Components::Patrol>(entity);
 
+    if(patrol.points.size() <= 0)
+        return;
     transform.pos.x = patrol.points[0].x;
     transform.pos.z = patrol.points[0].z;
     transform.pos.y = patrol.points[0].y;

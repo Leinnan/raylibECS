@@ -5,6 +5,7 @@ namespace Components {
 struct DestroyAfterTime final {
     float timeLeft = 0.0f;
     DestroyAfterTime(float time) : timeLeft(time) {}
+    DestroyAfterTime(){}
 };
 } // namespace Components
   // Components

@@ -73,6 +73,11 @@ void Components::to_json(json &j, const Components::Missile &t) {
 
 }
 
+void Components::from_json(const json &j, Components::Missile &t) {
+    t.angle = j.at("angle").get<float>();
+    t.speed = j.at("speed").get<float>();
+}
+
 void Components::to_json(json &j, const Components::DestroyAfterTime &t) {
     j = json{{"type", "DestroyAfterTime"},{"timeLeft",t.timeLeft}};
 }
@@ -136,6 +141,12 @@ void Components::parseToFile(entt::registry<> &registry, const char *filename) {
         {
             json component;
             Components::to_json(component,registry.get<Components::MeshRenderer>(entity));
+            entityObject.push_back(component);
+        }
+        if(registry.has<Components::CameraTarget>(entity))
+        {
+            json component;
+            Components::to_json(component,registry.get<Components::CameraTarget>(entity));
             entityObject.push_back(component);
         }
         if(registry.has<Components::Transform>(entity))
@@ -205,5 +216,70 @@ void Components::parseToFile(entt::registry<> &registry, const char *filename) {
     else
     {
         std::cout << "CANNOT OPEN FILE\n";
+    }
+}
+
+void Components::readFromFile(entt::registry<> &registry, const char *filename) {
+
+    nlohmann::json jsonReader;
+    std::ifstream file(filename);
+    file >> jsonReader;
+
+    for (nlohmann::json &object : jsonReader)
+    {
+        if(!object.is_array())
+            continue;
+
+        auto entity = registry.create();
+
+        for(nlohmann::json &component : object)
+        {
+            const std::string type = component.at("type").get<std::string>();
+
+            if(type.compare("MeshRenderer") == 0)
+            {
+                registry.assign<Components::MeshRenderer>(entity, component.get<Components::MeshRenderer>());
+            }
+            else if(type.compare("Transform") == 0)
+            {
+                registry.assign<Components::Transform>(entity, component.get<Components::Transform>());
+            }
+            else if(type.compare("CameraTarget") == 0)
+            {
+                registry.assign<Components::CameraTarget>(entity, component.get<Components::CameraTarget>());
+            }
+            else if(type.compare("PlayerInput") == 0)
+            {
+                registry.assign<Components::PlayerInput>(entity, component.get<Components::PlayerInput>());
+            }
+            else if(type.compare("Velocity") == 0)
+            {
+                registry.assign<Components::Velocity>(entity, component.get<Components::Velocity>());
+            }
+            else if(type.compare("Actor") == 0)
+            {
+                registry.assign<Components::Actor>(entity, component.get<Components::Actor>());
+            }
+            else if(type.compare("RotatingObject") == 0)
+            {
+                registry.assign<Components::RotatingObject>(entity, component.get<Components::RotatingObject>());
+            }
+            else if(type.compare("Missile") == 0)
+            {
+                registry.assign<Components::Missile>(entity, component.get<Components::Missile>());
+            }
+            else if(type.compare("DestroyAfterTime") == 0)
+            {
+                registry.assign<Components::DestroyAfterTime>(entity, component.get<Components::DestroyAfterTime>());
+            }
+            else if(type.compare("Patrol") == 0)
+            {
+                registry.assign<Components::Patrol>(entity, component.get<Components::Patrol>());
+            }
+            else if(type.compare("Collisions") == 0)
+            {
+                registry.assign<Components::Collisions>(entity, component.get<Components::Collisions>());
+            }
+        }
     }
 }
