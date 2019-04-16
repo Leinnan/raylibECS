@@ -2,6 +2,7 @@
 #include "systems/AiSystem.hpp"
 #include "systems/CollisionSystem.hpp"
 #include "systems/DestroySystem.hpp"
+#include "systems/EditorSystem.hpp"
 #include "systems/MissileSystem.hpp"
 #include "systems/MovementSystem.hpp"
 #include "systems/PlayerInputSystem.hpp"
@@ -9,10 +10,9 @@
 #include "utils/JsonParser.hpp"
 #include <entt/entt.hpp>
 
-using nlohmann::json;
-
 const int screenWidth = 1024;
 const int screenHeight = 600;
+const bool isEditor = true;
 
 int main() {
     entt::registry registry;
@@ -23,6 +23,7 @@ int main() {
     Systems::CollisionSystem collisionSystem(registry);
     Systems::MovementSystem movementSystem;
     Systems::DestroySystem destroySystem;
+    Systems::EditorSystem editorSystem;
     Systems::AiSystem aiSystem(registry);
     Systems::MissileSystem missileSystem;
 
@@ -37,13 +38,23 @@ int main() {
 
     SetTargetFPS(60);
     while (!WindowShouldClose()) {
-        destroySystem.Update(registry);
-        playerInputSystem.Update(registry);
-        missileSystem.Update(registry);
-        aiSystem.Update(registry, GetFrameTime());
-        movementSystem.Update(registry);
+        if(!isEditor)
+        {
+            destroySystem.Update(registry);
+            playerInputSystem.Update(registry);
+            missileSystem.Update(registry);
+            aiSystem.Update(registry, GetFrameTime());
+            movementSystem.Update(registry);
+        }
+
         collisionSystem.Update(registry);
+
+        if(isEditor)
+        {
+            editorSystem.Update(registry);
+        }
         renderSystem.Update(registry, camera);
+
     }
 
     CloseWindow();
